@@ -19,6 +19,21 @@ El sistema SHALL consultar al menos dos fuentes de precios independientes entre 
 - **THEN** el sistema registra los resultados de la fuente que respondió
 - **AND** contabiliza el fallo de la otra sin interrumpir el sondeo
 
+### Requirement: Búsqueda en ventana flexible
+
+La capa de proveedores SHALL ofrecer una operación de búsqueda que reciba una ventana de fechas de salida y una duración de viaje en noches, y SHALL devolver los itinerarios de los bloques posibles con independencia de cuántas peticiones necesite cada fuente para resolverla.
+
+#### Scenario: Ventana resuelta contra cualquier fuente
+
+- **WHEN** se solicita una búsqueda con una ventana de fechas y una duración en noches
+- **THEN** el resultado incluye itinerarios de los bloques evaluados, cada uno con sus fechas concretas de salida y regreso
+- **AND** quien la invoca no necesita saber cuántas peticiones hizo la fuente
+
+#### Scenario: Bloque más barato identificable
+
+- **WHEN** una búsqueda en ventana flexible devuelve resultados de varios bloques
+- **THEN** cada resultado indica a qué bloque de fechas corresponde, de modo que pueda determinarse el más barato
+
 ### Requirement: Punto de venta fijo
 
 Todas las consultas de precio SHALL realizarse con el punto de venta y la moneda de referencia configurados para el usuario, de forma explícita y constante. Un precio obtenido bajo un punto de venta distinto del configurado NO SHALL registrarse.

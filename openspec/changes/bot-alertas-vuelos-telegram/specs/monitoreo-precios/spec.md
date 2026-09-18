@@ -18,20 +18,26 @@ El sistema SHALL consultar cada búsqueda activa a un intervalo configurado, apl
 - **WHEN** hay varias búsquedas activas cuyos sondeos coinciden en el tiempo
 - **THEN** el sistema las ejecuta de forma secuencial y separadas entre sí, nunca en paralelo
 
-### Requirement: Niveles de refresco en modo flexible
+### Requirement: Coste acotado de la ventana flexible
 
-Para una búsqueda en modo de ventana flexible, el sistema SHALL separar el barrido completo de la ventana del seguimiento frecuente, para acotar el número de consultas.
+Para una búsqueda en modo de ventana flexible, el sistema SHALL evaluar la ventana completa al menos una vez al día contra cada fuente, sin que el número de consultas crezca con el número de bloques cuando la fuente permite resolver la ventana en una sola petición.
 
-#### Scenario: Barrido completo diario
+#### Scenario: Fuente que resuelve la ventana de una vez
 
-- **WHEN** transcurre el periodo configurado para el barrido completo
-- **THEN** el sistema evalúa todos los bloques posibles de la ventana
-- **AND** selecciona los bloques más baratos para el seguimiento frecuente
+- **WHEN** una fuente admite consultar un rango de fechas de salida junto con una duración de viaje
+- **THEN** el sistema obtiene todos los bloques en una sola consulta
+- **AND** puede repetirla en cada sondeo ordinario
 
-#### Scenario: Seguimiento frecuente acotado
+#### Scenario: Fuente que exige consultar bloque a bloque
 
-- **WHEN** se ejecuta un sondeo ordinario sobre una búsqueda en modo flexible
-- **THEN** el sistema consulta únicamente los bloques seleccionados en el último barrido completo
+- **WHEN** una fuente solo admite consultar un par de fechas concreto
+- **THEN** el sistema evalúa la ventana completa una vez al día
+- **AND** en los sondeos ordinarios consulta únicamente los bloques más baratos del último barrido
+
+#### Scenario: El coste se mantiene acotado
+
+- **WHEN** se amplía la ventana de una búsqueda de modo que crece el número de bloques posibles
+- **THEN** el número de consultas diarias contra una fuente que resuelve la ventana de una vez no aumenta
 
 ### Requirement: Serie histórica por búsqueda y fuente
 

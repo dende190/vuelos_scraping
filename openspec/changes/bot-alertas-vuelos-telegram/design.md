@@ -31,6 +31,7 @@ Ver `proposal.md` para la motivación y el alcance.
 - Alta disponibilidad, redundancia o recuperación automática ante caída del VPS.
 - Concurrencia: el sistema ejecuta una consulta cada vez, a propósito.
 - Escalado horizontal o multi-instancia. Un proceso, una base de datos, un fichero.
+- **Calendario de precios (aplazado a una segunda fase, decidido el 18-sep-2026).** La fase 1 descubrió que Kiwi expone `returnItineraryPricesCalendar`, `itineraryPriceGraph` e `itineraryPriceTable`, que harían viable el calendario verde/amarillo/rojo por muy poco coste de consultas. Se deja fuera a propósito: el coste real no está en obtener los datos sino en decidir cómo se presenta un calendario dentro de Telegram, y eso abre más preguntas de las que resuelve en un MVP. Queda anotado aquí para no volver a investigarlo.
 
 ## Decisions
 
@@ -79,7 +80,7 @@ Ver `proposal.md` para la motivación y el alcance.
 
 **Motivo:** está verificado que Google Flights acepta parámetros de país, idioma y moneda, y que las tarifas dependen del mercado. También está verificado que `fast-flights` no documenta esos parámetros. Si la librería consulta por omisión un mercado distinto, el sistema vigilaría precios plausibles pero que el usuario no puede pagar, sin ningún síntoma visible. Es el fallo más caro del diseño y por eso se trata como requisito duro y se verifica antes de escribir nada más.
 
-**Incógnita abierta que resuelve la fase 0:** si basta con el parámetro o si el mercado lo determina la dirección IP de salida. Si fuera lo segundo, el VPS en Francia daría precios del mercado equivocado y habría que enrutar el tráfico por Colombia.
+**Resuelto en la fase 1:** el parámetro `gl` sí lo lee Google, pero `fast-flights` no lo envía. La solución es reutilizar su codificador y construir la petición con `gl` añadido. Ver "Resultados de la fase 1".
 
 ### 6. Sondeo cada 4 horas con desplazamiento aleatorio
 
@@ -89,11 +90,20 @@ Ver `proposal.md` para la motivación y el alcance.
 
 **Motivo:** las tarifas aéreas se recargan unas pocas veces al día, no de forma continua. Sondear cada cinco minutos descartaría más del 95 % de las respuestas por idénticas, y a cambio dibujaría exactamente el patrón regular y de alto volumen que provoca bloqueos. Cuatro horas capturan prácticamente los mismos mínimos con dos órdenes de magnitud menos de tráfico. **Este razonamiento se apoya en una frecuencia de recarga que no se ha verificado documentalmente**; la fase 0 incluye contrastarlo midiendo cuántos sondeos consecutivos devuelven precio idéntico.
 
-### 7. Dos niveles de refresco en modo flexible
+### 7. La ventana flexible la resuelve cada proveedor a su manera
 
-**Elegido:** barrido completo de la ventana una vez al día; seguimiento cada 4 horas solo sobre los bloques más baratos del último barrido.
+**Elegido:** el contrato de proveedor expone una operación de búsqueda en ventana flexible que recibe la ventana y la duración en noches. Cada adaptador la resuelve con lo que su fuente ofrece:
 
-**Motivo:** una ventana de 27 días con bloques de 12 días son 16 combinaciones. A 4 horas por sondeo serían 96 consultas diarias por búsqueda, y con cinco búsquedas casi 500. Con dos niveles quedan 16 consultas al día del barrido más 18 del seguimiento: unas 34 por búsqueda. La información que se pierde es despreciable, porque el bloque más barato no cambia cada cuatro horas.
+| Proveedor | Cómo la resuelve | Consultas por barrido |
+|---|---|---|
+| Kiwi | De forma nativa: `outboundDepartureDate` como rango más `nightsCount` como rango de noches | **1** |
+| Google Flights | Barrido: una consulta por cada bloque posible, más seguimiento posterior de los más baratos | **N** (16 en el ejemplo) |
+
+Para el adaptador de Google se mantienen los dos niveles: barrido completo una vez al día y seguimiento cada 4 horas solo sobre los bloques más baratos del último barrido. Para Kiwi los dos niveles no aplican, porque el barrido cuesta una sola consulta y puede hacerse en cada sondeo.
+
+**Motivo:** verificado en la fase 1 que el esquema de Kiwi acepta la ventana y las noches como rangos. Una ventana de 27 días con bloques de 12 días son 16 combinaciones: con Google, sondear las 16 cada 4 horas serían 96 consultas diarias por búsqueda, y los dos niveles lo dejan en unas 34. Con Kiwi son 6 al día sin perder nada.
+
+**Alternativa descartada:** imponer el barrido por bloques a las dos fuentes por uniformidad. Habría desperdiciado la capacidad nativa de Kiwi y multiplicado por 16 sus consultas a cambio de nada. La asimetría se queda dentro del adaptador y no se filtra al resto del sistema.
 
 ### 8. Confirmación con botones en lugar de interpretación automática
 
@@ -138,6 +148,74 @@ Ver `proposal.md` para la motivación y el alcance.
 `notificaciones` existe por separado a propósito: el umbral se evalúa contra **el último precio notificado**, no contra el último precio registrado. Sin esa distinción, una bajada lenta y sostenida generaría un aviso en cada sondeo.
 
 `precio_ref` guarda el importe convertido a la moneda de comparación junto al original, para que una variación del tipo de cambio nunca se confunda con una bajada de tarifa.
+
+## Resultados de la fase 1 (verificación de fuentes)
+
+Medido el 18 de septiembre de 2026 desde una IP de Bogotá (ETB, AS19429), sobre la ruta BOG-RDU con salida el 20-nov-2026 y regreso el 04-dic-2026.
+
+### Google Flights a través de `fast-flights`
+
+**Funciona.** Versión 3.1.0. A fechas de uno a dos meses vista devuelve entre cinco y seis itinerarios con precio, aerolínea, segmentos, horarios y duración. Aparecen Avianca, COPA, LATAM, American, Delta, United y Frontier, es decir, las compañías relevantes para rutas Colombia-Estados Unidos. Las incidencias abiertas del repositorio no impidieron ninguna consulta.
+
+**Lo que se confirmó del mercado:**
+
+| Comprobación | Resultado |
+|---|---|
+| ¿`fast-flights` envía el país (`gl`)? | **No.** Construye la petición solo con `tfs`, `hl` y `curr` |
+| ¿Google lee `gl` si se le añade? | **Sí.** Con moneda libre, sin `gl` responde en COP y con `gl=US` responde en USD |
+| ¿Es reutilizable el codificador? | **Sí.** `Query.params()` da el `tfs` ya codificado y `fast_flights.parser.parse` es público, así que basta con añadir `gl` y hacer la petición |
+| ¿Cambia la tarifa entre mercados? | **No en esta ruta.** Emparejando itinerarios por aerolínea y hora de salida, el cociente COP/USD es constante en 3.159: es el mismo precio convertido |
+
+**Consecuencia para el diseño:** el adaptador no puede usar `get_flights` tal cual; debe componer la petición con `gl` explícito. El `impersonate="chrome_145"` que aplica la librería conviene conservarlo.
+
+**Lo que esto no demuestra:** que el mercado nunca afecte al precio. Es una ruta, un día y un par de fechas. La conclusión sólida es que el mecanismo para fijar el mercado existe y funciona, no que dé igual usarlo.
+
+**Incógnita que solo se resuelve en el VPS:** si `gl=CO` desde una IP francesa devuelve de verdad el mercado colombiano, o si Google prioriza la IP. No es comprobable desde Colombia. La tarea 11.2 lo contrasta contra el navegador una vez desplegado.
+
+### Kiwi a través de su GraphQL público
+
+**Funciona sin credenciales.** El extremo `https://api.skypicker.com/umbrella/v2/graphql` responde con HTTP 200 sin cabecera de autenticación, sin clave y sin proxy. La introspección del esquema está habilitada, así que el contrato es consultable en cualquier momento.
+
+**Presencia de campos.** Sobre 24 itinerarios de tres rutas distintas (BOG-RDU, BOG-MAD, MDE-MIA), estos campos vinieron en el 100 % de los resultados:
+
+| Campo | Para qué sirve |
+|---|---|
+| `price { amount currency { code } }` | Precio y moneda |
+| `bagsInfo.includedCheckedBags` y `hasNoCheckedBaggage` | Equipaje facturado incluido |
+| `travelHack.isVirtualInterlining` | **Marca el billete separado / conexión autogestionada** |
+| `travelHack.isTrueHiddenCity` y `isThrowawayTicket` | Otras prácticas de riesgo, a excluir |
+| `bookingOptions.edges[].node.bookingUrl` | Enlace de reserva directo |
+
+Es decir, todo lo que `proveedores-precios` exige etiquetar se puede leer de la respuesta, al contrario que en Google Flights.
+
+**Mercado y moneda:** `options` acepta `market`, `currency` y `locale`. Con `market: "co"` y `currency: "usd"` la respuesta llegó en dólares. Cumple el requisito de punto de venta fijo de forma explícita y sin rodeos.
+
+**Filtros:** `ItinerariesFilterInput` cubre todos los que pidió el usuario: `maxStopsCount`, `stopoverTime`, `showNoCheckedBags`, `carriers` y `excludeCarriers`, y rangos horarios en `outbound` e `inbound`. Además `enableSelfTransfer`, `enableThrowAwayTicketing` y `enableTrueHiddenCity` permiten excluir en origen los itinerarios que no queremos comparar.
+
+**Dos capacidades del esquema que el diseño no contemplaba:**
+
+1. `ItineraryReturnInput` acepta `outboundDepartureDate` como **rango** y `nightsCount` como **rango de noches**. Es decir, el modo de ventana flexible es nativo: una sola consulta cubre lo que el diseño resolvía con dieciséis.
+2. Existen `returnItineraryPricesCalendar`, `itineraryPriceGraph` e `itineraryPriceTable`, que devuelven precios por fecha: justo el calendario que se había dejado fuera del alcance por considerarlo caro.
+
+Ambas cosas afectan a la decisión 7 y al alcance del MVP. Pendiente de decisión del usuario antes de reescribirlas.
+
+**Comparación con Google en la misma ruta y fechas** (BOG-RDU, 20-nov a 04-dic, en dólares): Google devolvió un mínimo de 631 y Kiwi de 818. Los itinerarios baratos de Kiwi en esta ruta salían con `isVirtualInterlining` verdadero, es decir, billetes separados. Confirma lo previsto: en rutas de Latinoamérica, Kiwi aporta resiliencia y detección de billetes separados, no mejor precio.
+
+### Dependencia no declarada
+
+`fast-flights` 3.1.0 importa `typing_extensions` sin declararlo. Con Python 3.14 el paquete no arranca hasta instalarlo aparte. Hay que fijarlo de forma explícita.
+
+### Límites de los datos que devuelve
+
+| Dato | Disponible |
+|---|---|
+| Precio, moneda, aerolínea, segmentos, horarios, duración, escalas | Sí |
+| Emisiones de carbono | Sí |
+| Enlace de reserva | **No.** Hay que construirlo con `Query.url()`, que apunta a la búsqueda en Google Flights |
+| Equipaje incluido en el resultado | **No.** Solo se puede filtrar en la petición, no leer en la respuesta |
+| Listado completo de vuelos | **No.** Devuelve la selección de Google, no todas las opciones |
+
+Que no venga el equipaje en la respuesta afecta al etiquetado exigido en `proveedores-precios`: para esta fuente, la ausencia de equipaje facturado no se puede afirmar leyendo el resultado, solo forzarse filtrando en la petición.
 
 ## Risks / Trade-offs
 

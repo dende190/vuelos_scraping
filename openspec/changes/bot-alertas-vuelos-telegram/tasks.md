@@ -6,18 +6,19 @@
 
 ## 1. Verificación de viabilidad de las fuentes (puerta)
 
-- [ ] 1.1 Instalar `fast-flights` y ejecutar una consulta real BOG->RDU con fechas futuras; verificar que devuelve itinerarios con precio y no una respuesta vacía ni error 401
-- [ ] 1.2 Leer el código fuente de `fast-flights` y determinar si permite fijar país (`gl`), idioma (`hl`) y moneda (`curr`); dejar por escrito en `design.md` qué mercado usa por omisión y cómo se fija el de Colombia
-- [ ] 1.3 Si 1.2 muestra que no es configurable, comprobar si el codificador de la petición es reutilizable para construir la URL a mano con los parámetros de mercado; verificar comparando el precio obtenido con el que muestra Google Flights en el navegador desde Colombia
-- [ ] 1.4 Determinar si el mercado lo fija el parámetro o la IP de salida: lanzar la misma consulta con país Colombia y país Estados Unidos, moneda fija en ambas, desde la misma IP; verificar si los precios difieren y anotar el resultado en `design.md`
-- [ ] 1.5 Lanzar una consulta real al GraphQL público de Kiwi sin credenciales; verificar que responde y guardar una respuesta completa de ejemplo como fichero de referencia
-- [ ] 1.6 Sobre la respuesta de 1.5, documentar qué campos vienen siempre y cuáles no: precio, moneda, escalas, aerolíneas, equipaje facturado, billetes separados y enlace de reserva; verificar contra al menos tres rutas distintas
-- [ ] 1.7 Comprobar si Kiwi admite fijar mercado y moneda; anotar el resultado en `design.md`
+- [x] 1.1 Instalar `fast-flights` y ejecutar una consulta real BOG->RDU con fechas futuras; verificar que devuelve itinerarios con precio y no una respuesta vacía ni error 401
+- [x] 1.2 Leer el código fuente de `fast-flights` y determinar si permite fijar país (`gl`), idioma (`hl`) y moneda (`curr`); dejar por escrito en `design.md` qué mercado usa por omisión y cómo se fija el de Colombia
+- [x] 1.3 Si 1.2 muestra que no es configurable, comprobar si el codificador de la petición es reutilizable para construir la URL a mano con los parámetros de mercado; verificar comparando el precio obtenido con el que muestra Google Flights en el navegador desde Colombia
+- [x] 1.4 Determinar si el mercado lo fija el parámetro o la IP de salida: lanzar la misma consulta con país Colombia y país Estados Unidos, moneda fija en ambas, desde la misma IP; verificar si los precios difieren y anotar el resultado en `design.md`
+- [x] 1.5 Lanzar una consulta real al GraphQL público de Kiwi sin credenciales; verificar que responde y guardar una respuesta completa de ejemplo como fichero de referencia
+- [x] 1.6 Sobre la respuesta de 1.5, documentar qué campos vienen siempre y cuáles no: precio, moneda, escalas, aerolíneas, equipaje facturado, billetes separados y enlace de reserva; verificar contra al menos tres rutas distintas
+- [x] 1.7 Comprobar si Kiwi admite fijar mercado y moneda; anotar el resultado en `design.md`
 - [ ] 1.8 Ejecutar la misma consulta contra ambas fuentes 6 veces separadas 30 minutos; verificar cuántas devuelven precio idéntico, para contrastar el supuesto de que las tarifas se recargan pocas veces al día
 
 ## 2. Andamiaje del proyecto
 
 - [ ] 2.1 Crear la estructura del proyecto Python con gestión de dependencias y fichero de configuración por variables de entorno; verificar que el proyecto arranca y lee la configuración sin secretos en el código
+- [ ] 2.1b Fijar `typing_extensions` como dependencia explícita, que `fast-flights` 3.1.0 importa sin declarar; verificar que una instalación limpia arranca sin `ModuleNotFoundError`
 - [ ] 2.2 Configurar el registro de eventos con niveles y salida a fichero rotado; verificar que un arranque deja traza legible
 - [ ] 2.3 Configurar el arranque de pruebas automáticas; verificar que la orden de pruebas se ejecuta en un proyecto vacío
 
@@ -31,17 +32,19 @@
 ## 4. Capa de proveedores de precios
 
 - [ ] 4.1 Definir el contrato común de proveedor con el resultado normalizado: precio, moneda, fuente, instante, enlace, etiquetas, escalas, aerolíneas y equipaje; verificar con una implementación simulada usada en pruebas
-- [ ] 4.2 Implementar el adaptador de Google Flights con punto de venta y moneda fijos según el resultado de las tareas 1.2 a 1.4; verificar que toda consulta emitida declara el mercado configurado
-- [ ] 4.3 Implementar el adaptador de Kiwi sobre su GraphQL; verificar que los campos documentados en 1.6 se mapean al resultado normalizado y que los ausentes no rompen el flujo
+- [ ] 4.2 Implementar el adaptador de Google Flights componiendo la petición a mano (reutilizando el codificador de `fast-flights` y su `parser.parse`, ya que la librería no envía `gl`), con punto de venta y moneda fijos; verificar que toda consulta emitida lleva `gl` y `curr` configurados
+- [ ] 4.3 Implementar el adaptador de Kiwi sobre `returnItineraries`, con `market`, `currency` y `locale` fijos y excluyendo `enableThrowAwayTicketing` y `enableTrueHiddenCity`; verificar que `bagsInfo`, `travelHack` y `bookingUrl` se mapean al resultado normalizado
 - [ ] 4.4 Implementar el etiquetado de resultados: billetes separados, conexión autogestionada, sin equipaje facturado y sin enlace de verificación; verificar con pruebas sobre respuestas de ejemplo guardadas
 - [ ] 4.5 Implementar el rechazo de resultados obtenidos bajo un mercado distinto del configurado; verificar con una prueba que un resultado así no llega a registrarse
 - [ ] 4.6 Implementar reintentos con esperas crecientes ante límite de peticiones y errores transitorios; verificar con pruebas que simulan respuestas de exceso de peticiones
 - [ ] 4.7 Implementar la conversión a la moneda de referencia conservando importe original y cambio aplicado; verificar con pruebas que ambos valores quedan registrados
+- [ ] 4.8 Implementar la búsqueda en ventana flexible en ambos adaptadores: nativa en Kiwi (`outboundDepartureDate` como rango más `nightsCount`) y por barrido de bloques en Google; verificar que ambos devuelven resultados etiquetados con su bloque de fechas
+- [ ] 4.9 Construir el enlace de verificación de los resultados de Google a partir de la URL de la consulta, dado que la fuente no devuelve enlace de reserva; verificar que el enlace abre la búsqueda equivalente en Google Flights
 
 ## 5. Modelo de búsquedas y ciclo de vida
 
 - [ ] 5.1 Implementar el modelo de búsqueda con los dos modos de fechas y los filtros; verificar con pruebas de creación en ambos modos
-- [ ] 5.2 Implementar el cálculo de bloques en modo flexible; verificar con una prueba que una ventana de 27 días con bloques de 12 produce exactamente 16 combinaciones
+- [ ] 5.2 Implementar el cálculo de bloques de una ventana flexible, usado por los adaptadores que deban consultar bloque a bloque; verificar con una prueba que una ventana de 27 días con bloques de 12 produce exactamente 16 combinaciones
 - [ ] 5.3 Implementar la máquina de estados con las transiciones entre activa, pausada, terminada, vencida y fallida; verificar con pruebas que las transiciones no permitidas se rechazan
 - [ ] 5.4 Implementar el vencimiento automático por fecha en ambos modos; verificar con pruebas de reloj simulado
 - [ ] 5.5 Implementar el contador de sondeos fallidos consecutivos y el paso a estado fallida, con reinicio al recuperarse; verificar con pruebas
@@ -68,7 +71,7 @@
 - [ ] 7.1 Implementar el planificador de sondeos con intervalo base y desplazamiento aleatorio; verificar registrando 20 ejecuciones y comprobando que ninguna cae en hora exacta ni a intervalo constante
 - [ ] 7.2 Garantizar la ejecución secuencial de las consultas; verificar con una prueba de que dos sondeos coincidentes no se solapan
 - [ ] 7.3 Implementar el registro de precios en la serie de cada par de búsqueda y fuente; verificar que el primer precio de una fuente nueva no se compara con el mínimo de otra
-- [ ] 7.4 Implementar el barrido completo diario de la ventana en modo flexible y la selección de los bloques más baratos; verificar que el seguimiento posterior solo consulta esos bloques
+- [ ] 7.4 Implementar la programación de la ventana flexible según lo que admita cada fuente: consulta única por sondeo cuando la fuente resuelve la ventana entera, y barrido diario más seguimiento de los bloques más baratos cuando no; verificar contando las consultas emitidas por cada adaptador en un sondeo
 - [ ] 7.5 Implementar la omisión de búsquedas no activas; verificar que una búsqueda pausada no genera consultas ni se contabiliza como fallo
 - [ ] 7.6 Registrar el recuento diario de consultas por fuente; verificar que el dato queda accesible para vigilar el volumen real
 
