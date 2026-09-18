@@ -1,0 +1,37 @@
+# Secretos y configuración local
+.env
+.env.*
+!.env.example
+
+# Base de datos y su histórico de precios
+*.db
+*.db-wal
+*.db-shm
+*.sqlite
+*.sqlite3
+backups/
+
+# Registros
+*.log
+logs/
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+env/
+build/
+dist/
+
+# Herramientas
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+
+# Claude Code: la configuración local es de cada máquina
+.claude/settings.local.json
+
+# macOS
+.DS_Store
