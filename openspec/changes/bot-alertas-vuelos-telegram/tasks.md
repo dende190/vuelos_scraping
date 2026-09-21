@@ -17,17 +17,17 @@
 
 ## 2. Andamiaje del proyecto
 
-- [ ] 2.1 Crear la estructura del proyecto Python con gestión de dependencias y fichero de configuración por variables de entorno; verificar que el proyecto arranca y lee la configuración sin secretos en el código
-- [ ] 2.1b Fijar `typing_extensions` como dependencia explícita, que `fast-flights` 3.1.0 importa sin declarar; verificar que una instalación limpia arranca sin `ModuleNotFoundError`
-- [ ] 2.2 Configurar el registro de eventos con niveles y salida a fichero rotado; verificar que un arranque deja traza legible
-- [ ] 2.3 Configurar el arranque de pruebas automáticas; verificar que la orden de pruebas se ejecuta en un proyecto vacío
+- [x] 2.1 Crear la estructura del proyecto Python con gestión de dependencias y fichero de configuración por variables de entorno; verificar que el proyecto arranca y lee la configuración sin secretos en el código
+- [x] 2.1b Fijar `typing_extensions` como dependencia explícita, que `fast-flights` 3.1.0 importa sin declarar; verificar que una instalación limpia arranca sin `ModuleNotFoundError`
+- [x] 2.2 Configurar el registro de eventos con niveles y salida a fichero rotado; verificar que un arranque deja traza legible
+- [x] 2.3 Configurar el arranque de pruebas automáticas; verificar que la orden de pruebas se ejecuta en un proyecto vacío
 
 ## 3. Persistencia
 
-- [ ] 3.1 Crear el esquema SQLite con las tablas `busquedas`, `precios`, `notificaciones` y `estado_fuentes` según el modelo de `design.md`; verificar que las migraciones se aplican sobre una base vacía
-- [ ] 3.2 Activar el modo WAL y crear los índices por búsqueda, fuente e instante de obtención; verificar con una consulta de plan de ejecución que las lecturas de serie usan índice
-- [ ] 3.3 Implementar el acceso a datos de búsquedas y precios; verificar con pruebas unitarias de alta, consulta y cambio de estado
-- [ ] 3.4 Implementar la copia de seguridad diaria del fichero SQLite; verificar que la copia se genera y que puede abrirse
+- [x] 3.1 Crear el esquema SQLite con las tablas `busquedas`, `precios`, `notificaciones` y `estado_fuentes` según el modelo de `design.md`; verificar que las migraciones se aplican sobre una base vacía
+- [x] 3.2 Activar el modo WAL y crear los índices por búsqueda, fuente e instante de obtención; verificar con una consulta de plan de ejecución que las lecturas de serie usan índice
+- [x] 3.3 Implementar el acceso a datos de búsquedas y precios; verificar con pruebas unitarias de alta, consulta y cambio de estado
+- [x] 3.4 Implementar la copia de seguridad diaria del fichero SQLite; verificar que la copia se genera y que puede abrirse
 
 ## 4. Capa de proveedores de precios
 

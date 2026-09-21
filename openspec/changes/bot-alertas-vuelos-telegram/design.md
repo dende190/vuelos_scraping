@@ -116,38 +116,56 @@ Para el adaptador de Google se mantienen los dos niveles: barrido completo una v
 ### 9. Modelo de datos
 
 ```
-  +-------------------+        +--------------------------+
-  |  busquedas        |        |  precios                 |
-  +-------------------+        +--------------------------+
-  | id                |<-------| busqueda_id              |
-  | chat_id           |   1:N  | fuente                   |
-  | origen, destino   |        | salida, regreso          |
-  | modo (A|B)        |        | precio, moneda           |
-  | salida, regreso   |        | precio_ref (moneda base) |
-  | ventana_ini/fin   |        | etiquetas                |
-  | duracion_dias     |        | enlace                   |
-  | filtros           |        | obtenido_en              |
-  | estado            |        +--------------------------+
-  | pausada_hasta     |
-  | creada_en         |        +--------------------------+
-  +-------------------+        |  notificaciones          |
-           |                   +--------------------------+
-           +------------------>| busqueda_id, fuente      |
-                          1:N  | precio_notificado        |
-                               | enviada_en               |
-                               +--------------------------+
-
-                               +--------------------------+
-                               |  estado_fuentes          |
-                               +--------------------------+
-                               | fuente, operativa        |
-                               | ultimo_ok, ultimo_fallo  |
-                               +--------------------------+
+  +-------------------+        +----------------------------+
+  |  busquedas        |        |  precios                   |
+  +-------------------+        +----------------------------+
+  | id                |<-------| busqueda_id                |
+  | chat_id           |   1:N  | fuente                     |
+  | origen, destino   |        | salida, regreso  (bloque)  |
+  | modo (A|B)        |        | precio, moneda             |
+  | salida, regreso   |        | precio_ref, moneda_ref     |
+  | ventana_ini/fin   |        | cambio_aplicado            |
+  | duracion_noches   |        | mercado, escalas           |
+  |                   |        | billetes_separados     0|1 |
+  | max_escalas       |        | sin_equipaje_facturado 0|1 |
+  | max_escala_minutos|        | no_verificable         0|1 |
+  | requiere_maleta   |        | ciudad_oculta          0|1 |
+  | franja_horaria    |        | billete_desechado      0|1 |
+  |                   |        | aerolineas (JSON, mostrar) |
+  | estado            |        | enlace, obtenido_en        |
+  | pausada_hasta     |        +----------------------------+
+  | sondeos_fallidos  |
+  +-------------------+        +----------------------------+
+      |          |             |  notificaciones            |
+      |          |             +----------------------------+
+      |          +------------>| busqueda_id, fuente        |
+      |                   1:N  | precio_notificado          |
+      |                        | motivo, enviada_en         |
+      |                        +----------------------------+
+      v  1:N
+  +------------------------+   +----------------------------+
+  |  busqueda_aerolineas   |   |  estado_fuentes            |
+  +------------------------+   +----------------------------+
+  | busqueda_id, aerolinea |   | fuente, operativa          |
+  +------------------------+   | ultimo_ok, ultimo_fallo    |
+                               +----------------------------+
 ```
+
+**Regla de modelado:** los conjuntos cerrados y conocidos van en columnas; solo lo que es una lista abierta y nunca se consulta por sus partes queda como JSON.
+
+Los filtros de una búsqueda y las advertencias de un precio están fijados en las specs, así que son columnas: el motor valida el valor con `CHECK`, un valor inventado se rechaza al escribir en vez de descubrirse semanas después al leer, y se pueden filtrar en SQL. Esto último no es teórico: `proveedores-precios` exige descartar los resultados que incumplen los filtros antes de que entren en la serie, y con JSON habría que traer la serie entera a memoria para filtrarla en Python. El índice `idx_precios_minimo` sigue sirviendo a esas consultas, comprobado con `EXPLAIN QUERY PLAN`.
+
+`precios.aerolineas` es la excepción y sigue en JSON: es una lista abierta de nombres, solo se muestra, y el filtro por aerolínea se aplica en la petición a la fuente, no en SQL. `busqueda_aerolineas` sí es tabla porque ahí la aerolínea es un criterio de búsqueda.
+
+**Por qué no enteros con tabla de catálogo para `estado`, `modo` y `motivo`:** SQLite no tiene tipo enumerado, así que las opciones son TEXT con `CHECK`, INTEGER con `CHECK`, o INTEGER con clave foránea a un catálogo. El `CHECK` da la misma garantía de integridad que la foránea sin obligar a un JOIN, no hay metadatos por estado que justifiquen la tabla, y a la escala de este sistema —decenas de búsquedas— la diferencia de rendimiento entre comparar un texto corto indexado y un entero es irrelevante. Lo que sí se gana es que la base sea legible al depurarla de madrugada: `WHERE estado = 'fallida'` se entiende y `WHERE estado = 4` no.
+
+**Instantes siempre en UTC con zona explícita.** El repositorio rechaza cualquier `datetime` sin zona horaria en lugar de suponerle una. Un instante sin zona es ambiguo, y compararlo después contra uno con zona lanza `TypeError`; suponerle la zona local produce algo peor, un desfase silencioso de horas. Se detectó al revisar `pausada_hasta`, que era exactamente este caso.
 
 `notificaciones` existe por separado a propósito: el umbral se evalúa contra **el último precio notificado**, no contra el último precio registrado. Sin esa distinción, una bajada lenta y sostenida generaría un aviso en cada sondeo.
 
 `precio_ref` guarda el importe convertido a la moneda de comparación junto al original, para que una variación del tipo de cambio nunca se confunda con una bajada de tarifa.
+
+Las fechas van en TEXT ISO-8601 porque SQLite no tiene tipo fecha: los tipos de almacenamiento reales son NULL, INTEGER, REAL, TEXT y BLOB, y una columna declarada `DATE` acepta cualquier cosa. ISO-8601 ordena bien alfabéticamente y lo entienden las funciones `date()` del motor.
 
 ## Resultados de la fase 1 (verificación de fuentes)
 
@@ -200,6 +218,28 @@ Es decir, todo lo que `proveedores-precios` exige etiquetar se puede leer de la 
 Ambas cosas afectan a la decisión 7 y al alcance del MVP. Pendiente de decisión del usuario antes de reescribirlas.
 
 **Comparación con Google en la misma ruta y fechas** (BOG-RDU, 20-nov a 04-dic, en dólares): Google devolvió un mínimo de 631 y Kiwi de 818. Los itinerarios baratos de Kiwi en esta ruta salían con `isVirtualInterlining` verdadero, es decir, billetes separados. Confirma lo previsto: en rutas de Latinoamérica, Kiwi aporta resiliencia y detección de billetes separados, no mejor precio.
+
+### Contraste contra el navegador
+
+Comparación simultánea el 18-sep-2026 a las 12:00, misma URL y mismo equipo, BOG-RDU 20-nov a 04-dic en dólares con `gl=CO`:
+
+| Navegador (11 resultados) | Adaptador (5 resultados) |
+|---|---|
+| 631 | **631** |
+| 677 | ausente |
+| 680 | **680** |
+| 710, 741, 765 | ausentes |
+| 818 | **818** |
+| 840 | **840** |
+| 1260 | **1313** |
+
+**Lo que valida:** el precio mínimo coincide exactamente, y es el que dispara las alertas. El navegador consultado desde Colombia devuelve los mismos importes que el adaptador con `gl=CO`, lo que confirma que el mercado aplicado es el correcto.
+
+**Lo que limita:** el adaptador ve cinco de los once itinerarios. Se pierde la franja intermedia, y el más caro discrepa en 53 dólares. La consecuencia práctica es que si un itinerario que el adaptador no ve baja de precio por debajo del mínimo actual, el sistema no se entera hasta que Google lo promocione a su selección destacada. Es una pérdida de sensibilidad, no de exactitud: lo que el adaptador informa es correcto, pero no lo ve todo.
+
+**No se mitiga en este MVP.** La segunda fuente reduce el riesgo pero no lo elimina, porque Kiwi tiene su propio recorte. Queda documentado para no confundirlo más adelante con un fallo del parser.
+
+**Observado de paso:** la página trae un bloque de valoración del precio ("Actualmente, los precios son normales") y accesos a tabla de fechas y gráfico de precios. Es la misma señal que se aplazó a la segunda fase; está en el HTML y sería extraíble sin consultas adicionales.
 
 ### Dependencia no declarada
 
