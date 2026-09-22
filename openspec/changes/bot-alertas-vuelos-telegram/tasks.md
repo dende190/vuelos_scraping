@@ -38,13 +38,13 @@
 - [x] 4.5 Implementar el rechazo de resultados obtenidos bajo un mercado distinto del configurado; verificar con una prueba que un resultado así no llega a registrarse
 - [x] 4.6 Implementar reintentos con esperas crecientes ante límite de peticiones y errores transitorios; verificar con pruebas que simulan respuestas de exceso de peticiones
 - [x] 4.7 Implementar la conversión a la moneda de referencia conservando importe original y cambio aplicado; verificar con pruebas que ambos valores quedan registrados
-- [ ] 4.8 Implementar la búsqueda en ventana flexible en ambos adaptadores: nativa en Kiwi (`outboundDepartureDate` como rango más `nightsCount`) y por barrido de bloques en Google; verificar que ambos devuelven resultados etiquetados con su bloque de fechas
+- [x] 4.8 Implementar la búsqueda en ventana flexible en ambos adaptadores: nativa en Kiwi (`outboundDepartureDate` como rango más `nightsCount`) y por barrido de bloques en Google; verificar que ambos devuelven resultados etiquetados con su bloque de fechas
 - [x] 4.9 Construir el enlace de verificación de los resultados de Google a partir de la URL de la consulta, dado que la fuente no devuelve enlace de reserva; verificar que el enlace abre la búsqueda equivalente en Google Flights
 
 ## 5. Modelo de búsquedas y ciclo de vida
 
 - [ ] 5.1 Implementar el modelo de búsqueda con los dos modos de fechas y los filtros; verificar con pruebas de creación en ambos modos
-- [ ] 5.2 Implementar el cálculo de bloques de una ventana flexible, usado por los adaptadores que deban consultar bloque a bloque; verificar con una prueba que una ventana de 27 días con bloques de 12 produce exactamente 16 combinaciones
+- [ ] 5.2 Implementar el cálculo de estancias de una ventana flexible contando noches en destino, usado por los adaptadores que deban consultar par a par; verificar con una prueba que una ventana de 27 días con estancias de 12 noches produce 16 fechas de salida y 31 pares a consultar
 - [ ] 5.3 Implementar la máquina de estados con las transiciones entre activa, pausada, terminada, vencida y fallida; verificar con pruebas que las transiciones no permitidas se rechazan
 - [ ] 5.4 Implementar el vencimiento automático por fecha en ambos modos; verificar con pruebas de reloj simulado
 - [ ] 5.5 Implementar el contador de sondeos fallidos consecutivos y el paso a estado fallida, con reinicio al recuperarse; verificar con pruebas

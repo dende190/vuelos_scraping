@@ -15,22 +15,52 @@ Una búsqueda SHALL quedar definida por un aeropuerto de origen, un aeropuerto d
 
 #### Scenario: Búsqueda en modo de ventana flexible
 
-- **WHEN** se crea una búsqueda con una ventana de fechas y una duración de viaje en días
-- **THEN** el sistema vigila todos los bloques de esa duración que caben completos dentro de la ventana
+- **WHEN** se crea una búsqueda con una ventana de fechas y una duración de viaje en noches
+- **THEN** el sistema vigila todas las estancias de esa duración que caben completas dentro de la ventana
 
-### Requirement: Evaluación de bloques en modo flexible
+### Requirement: La duración se cuenta en noches en destino
 
-En modo de ventana flexible, el sistema SHALL evaluar cada bloque posible de la duración indicada y SHALL identificar el bloque de menor precio como recomendación al usuario.
+La duración de un viaje SHALL medirse en noches pasadas en destino, desde la llegada del vuelo de ida hasta el despegue del de vuelta, y NO como días transcurridos entre los dos despegues. Un itinerario cuya estancia real no coincida con la pedida NO SHALL presentarse como resultado de esa búsqueda.
 
-#### Scenario: Ventana de 27 días con bloques de 12 días
+#### Scenario: Vuelo nocturno que aterriza al día siguiente
 
-- **WHEN** la ventana abarca 27 días y la duración es de 12 días
-- **THEN** el sistema evalúa los 16 bloques posibles
-- **AND** informa cuál es el bloque más barato con sus fechas concretas de salida y regreso
+- **WHEN** el vuelo de ida despega el día 17 y aterriza en destino el 18, y el de vuelta despega el 23
+- **THEN** el sistema cuenta 5 noches, no 6
+- **AND** ese itinerario es un resultado válido para una búsqueda de 5 noches
+
+#### Scenario: Vuelo que aterriza el mismo día
+
+- **WHEN** el vuelo de ida despega y aterriza el día 18, y el de vuelta despega el 23
+- **THEN** el sistema cuenta 5 noches
+- **AND** ese itinerario es un resultado válido para una búsqueda de 5 noches
+
+#### Scenario: Estancia distinta de la pedida
+
+- **WHEN** un itinerario da una estancia real distinta del número de noches pedido
+- **THEN** el sistema lo descarta y no lo registra en el histórico de esa búsqueda
+
+#### Scenario: La fuente no informa de la llegada
+
+- **WHEN** una fuente devuelve un itinerario sin fecha de llegada a destino
+- **THEN** el sistema no puede afirmar que incumple la duración y lo acepta
+
+### Requirement: Evaluación de estancias en modo flexible
+
+En modo de ventana flexible, el sistema SHALL evaluar todas las estancias posibles de la duración indicada dentro de la ventana y SHALL identificar la más barata como recomendación al usuario.
+
+#### Scenario: Se informa de la mejor estancia
+
+- **WHEN** una búsqueda en ventana flexible obtiene resultados
+- **THEN** el sistema informa de la estancia más barata con sus fechas concretas de salida y regreso
+
+#### Scenario: Ninguna estancia se sale de la ventana
+
+- **WHEN** el sistema evalúa las estancias posibles
+- **THEN** todas las fechas de salida y de regreso quedan dentro de la ventana indicada
 
 #### Scenario: La recomendación cambia
 
-- **WHEN** en un sondeo posterior el bloque más barato pasa a ser otro distinto
+- **WHEN** en un sondeo posterior la estancia más barata pasa a ser otra distinta
 - **THEN** el sistema registra el cambio y lo refleja en la siguiente comunicación al usuario
 
 ### Requirement: Estados de una búsqueda

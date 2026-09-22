@@ -212,11 +212,19 @@ class AdaptadorKiwi(Proveedor):
     # ---------------------------------------------------------------- mapeo
 
     @staticmethod
-    def _fecha_de(sector: dict | None) -> date | None:
+    def _fecha_de(sector: dict | None, *, llegada: bool = False) -> date | None:
+        """Fecha de despegue del sector, o de llegada si se pide.
+
+        La de llegada es la que permite contar las noches en destino, que es
+        lo que significa `nightsCount` y lo que el usuario entiende por
+        duración del viaje.
+        """
         tramos = (sector or {}).get("sectorSegments") or []
         if not tramos:
             return None
-        crudo = (((tramos[0] or {}).get("segment") or {}).get("source") or {}).get("localTime")
+        tramo = (tramos[-1] if llegada else tramos[0]) or {}
+        extremo = "destination" if llegada else "source"
+        crudo = ((tramo.get("segment") or {}).get(extremo) or {}).get("localTime")
         if not crudo:
             return None
         return datetime.fromisoformat(crudo.replace("Z", "+00:00")).date()
@@ -237,6 +245,7 @@ class AdaptadorKiwi(Proveedor):
 
         ida = self._fecha_de(crudo.get("outbound")) or salida
         vuelta = self._fecha_de(crudo.get("inbound")) or regreso
+        llegada = self._fecha_de(crudo.get("outbound"), llegada=True)
         if ida is None or vuelta is None:
             return None
 
@@ -266,7 +275,7 @@ class AdaptadorKiwi(Proveedor):
         enlace = _absoluto(ruta)
 
         return Resultado(
-            salida=ida, regreso=vuelta, precio=float(precio),
+            salida=ida, regreso=vuelta, llegada_ida=llegada, precio=float(precio),
             moneda=(devuelta or moneda).upper(), mercado=mercado,
             escalas=max(len(tramos) - 1, 0), aerolineas=aerolineas,
             etiquetas=frozenset(etiquetas), enlace=enlace,

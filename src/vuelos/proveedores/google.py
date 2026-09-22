@@ -136,8 +136,14 @@ class AdaptadorGoogle(Proveedor):
         return resultados
 
     def buscar_ventana(self, consulta: ConsultaVentana) -> list[Resultado]:
-        """Bloque a bloque: la fuente no admite rangos de fechas."""
+        """Bloque a bloque: la fuente no admite rangos de fechas.
+
+        Se consultan los dos regresos posibles por cada salida y se quedan
+        solo los que dan las noches en destino pedidas. Esa comprobación no se
+        puede hacer antes de preguntar, porque depende de la hora de llegada.
+        """
         resultados: list[Resultado] = []
+        descartados = 0
         for salida, regreso in consulta.bloques():
             bloque = Consulta(
                 origen=consulta.origen, destino=consulta.destino, salida=salida,
@@ -145,9 +151,18 @@ class AdaptadorGoogle(Proveedor):
                 filtros=consulta.filtros,
             )
             try:
-                resultados.extend(self.buscar(bloque))
+                for r in self.buscar(bloque):
+                    if r.dura(consulta.duracion_noches):
+                        resultados.append(r)
+                    else:
+                        descartados += 1
             except ErrorProveedor as exc:
                 log.warning("bloque %s/%s fallido: %s", salida, regreso, exc)
+        if descartados:
+            log.info(
+                "google ventana: %d itinerarios descartados por no dar %d noches en destino",
+                descartados, consulta.duracion_noches,
+            )
         return resultados
 
     def peticiones_por_ventana(self, consulta: ConsultaVentana) -> int:
@@ -166,9 +181,19 @@ class AdaptadorGoogle(Proveedor):
         # informa de ninguna de las dos en la respuesta. No se marca
         # `sin_equipaje_facturado` porque no consta que falte, solo que se
         # desconoce; afirmarlo sería inventarse un dato.
+        # Los segmentos que trae el resultado son solo los de la ida, asi que
+        # el ultimo marca la llegada a destino.
+        llegada = None
+        if segmentos:
+            crudo_llegada = getattr(segmentos[-1], "arrival", None)
+            fecha = getattr(crudo_llegada, "date", None)
+            if isinstance(fecha, tuple) and len(fecha) == 3:
+                llegada = date(*fecha)
+
         return Resultado(
             salida=consulta.salida,
             regreso=consulta.regreso,
+            llegada_ida=llegada,
             precio=float(precio),
             moneda=consulta.moneda,
             # La respuesta no confirma el mercado aplicado; se registra el que

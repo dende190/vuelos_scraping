@@ -50,7 +50,13 @@ class Consulta:
 
 @dataclass(frozen=True)
 class ConsultaVentana:
-    """Búsqueda de todos los bloques de N noches dentro de una ventana.
+    """Búsqueda de todas las estancias de N noches dentro de una ventana.
+
+    **`duracion_noches` son noches EN DESTINO**, contadas desde que se llega
+    hasta que se despega de vuelta. No son días entre despegues: con un vuelo
+    nocturno que sale el 17 a las 15:55 y aterriza el 18 a las 00:24, volver
+    el 23 son cinco noches, no seis. Es la lectura natural de "quiero estar
+    doce días allá" y la que usa `nightsCount` de Kiwi.
 
     Cada adaptador la resuelve como pueda: Kiwi de una vez, Google bloque a
     bloque. Quien la invoca no necesita saber cuántas peticiones costó.
@@ -72,7 +78,7 @@ class ConsultaVentana:
             raise ValueError("la duración debe ser de al menos una noche")
         if self.duracion_noches > self.dias_de_ventana:
             raise ValueError(
-                f"una duración de {self.duracion_noches} noches no cabe en una ventana "
+                f"una estancia de {self.duracion_noches} noches no cabe en una ventana "
                 f"de {self.dias_de_ventana} días"
             )
 
@@ -81,14 +87,29 @@ class ConsultaVentana:
         return (self.ventana_fin - self.ventana_ini).days
 
     def bloques(self) -> list[tuple[date, date]]:
-        """Los bloques posibles, para los adaptadores que consulten uno a uno."""
+        """Pares de fechas de despegue a consultar, uno a uno.
+
+        Solo lo necesitan los adaptadores que no admiten rangos de fechas.
+        Como la duración son noches en destino y la fecha de llegada depende
+        del vuelo, por cada fecha de salida hay dos regresos posibles: el que
+        corresponde a llegar el mismo día y el de llegar al día siguiente.
+        Se consultan los dos y después se descartan los que no cumplan las
+        noches pedidas, porque la hora de llegada no se conoce de antemano.
+        """
         from datetime import timedelta
 
-        duracion = timedelta(days=self.duracion_noches)
-        bloques = []
+        vistos: set[tuple[date, date]] = set()
+        bloques: list[tuple[date, date]] = []
         salida = self.ventana_ini
-        while salida + duracion <= self.ventana_fin:
-            bloques.append((salida, salida + duracion))
+        while salida <= self.ventana_fin:
+            for dias_hasta_llegar in (0, 1):
+                regreso = salida + timedelta(days=dias_hasta_llegar + self.duracion_noches)
+                if regreso > self.ventana_fin:
+                    continue
+                par = (salida, regreso)
+                if par not in vistos:
+                    vistos.add(par)
+                    bloques.append(par)
             salida += timedelta(days=1)
         return bloques
 
@@ -108,6 +129,10 @@ class Resultado:
     moneda: str
     mercado: str
     escalas: int
+    #: Fecha de llegada a destino del vuelo de ida. Es lo que permite contar
+    #: las noches reales en destino; con un vuelo nocturno no coincide con
+    #: `salida`. `None` cuando la fuente no la informa.
+    llegada_ida: date | None = None
     aerolineas: tuple[str, ...] = ()
     etiquetas: frozenset[Etiqueta] = field(default_factory=frozenset)
     enlace: str | None = None
@@ -120,6 +145,23 @@ class Resultado:
             object.__setattr__(
                 self, "etiquetas", self.etiquetas | {Etiqueta.NO_VERIFICABLE}
             )
+
+    @property
+    def noches_en_destino(self) -> int | None:
+        """Noches reales entre la llegada y el despegue de vuelta."""
+        if self.llegada_ida is None:
+            return None
+        return (self.regreso - self.llegada_ida).days
+
+    def dura(self, noches: int) -> bool:
+        """Si la estancia es la pedida.
+
+        Cuando la fuente no informa de la llegada no se puede afirmar que no
+        cumple, así que se acepta: descartarlo sería tirar un precio válido
+        por un dato que falta.
+        """
+        reales = self.noches_en_destino
+        return reales is None or reales == noches
 
     def cumple(self, filtros: Filtros) -> bool:
         """Si este resultado respeta los filtros duros de la búsqueda.

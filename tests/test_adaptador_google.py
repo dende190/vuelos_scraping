@@ -91,12 +91,14 @@ def test_el_enlace_cambia_con_las_fechas(consulta):
 
 # ------------------------------------------------------------ coste y filtros
 
-def test_la_ventana_cuesta_una_peticion_por_bloque():
+def test_la_ventana_cuesta_una_peticion_por_par_de_fechas():
     ventana = ConsultaVentana(origen="BOG", destino="RDU",
                               ventana_ini=date(2027, 1, 20), ventana_fin=date(2027, 2, 16),
                               duracion_noches=12, mercado="CO", moneda="USD")
-    assert _adaptador().peticiones_por_ventana(ventana) == 16
-    assert len(_peticiones(ventana)) == 16
+    # Con noches en destino hay dos regresos candidatos por salida: 16 fechas
+    # de salida dan 31 pares, uno menos de 32 porque el ultimo no cabe.
+    assert _adaptador().peticiones_por_ventana(ventana) == 31
+    assert len(_peticiones(ventana)) == 31
 
 
 def test_pedir_maleta_cambia_la_peticion(consulta):

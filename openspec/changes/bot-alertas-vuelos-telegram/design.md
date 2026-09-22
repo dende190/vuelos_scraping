@@ -264,7 +264,7 @@ Medido entre el 21 y el 22 de septiembre de 2026, seis muestras sobre BOG-RDU 20
 
 **Aviso sobre el umbral:** la bajada real de 657 a 631 es del 4,1 %, por debajo del umbral configurado del 5 %, así que no habría generado alerta. Con un solo caso no se cambia el valor, pero si el patrón se repite hay que bajarlo.
 
-### Dos definiciones distintas de "duración del viaje"
+### La duración del viaje se cuenta en noches en destino
 
 Detectado el 21-sep-2026 al probar la ventana flexible contra Kiwi.
 
@@ -282,7 +282,9 @@ La fuente es coherente: la columna de noches en destino vale 5 en todos los caso
 
 **Consecuencia:** para una misma búsqueda, el adaptador de Kiwi y el de Google cubren conjuntos de bloques distintos, y una ventana de N días devuelve más bloques de los que `ConsultaVentana.bloques()` enumera. Los precios registrados son correctos —cada uno lleva sus fechas reales de despegue— pero la recomendación de "mejor bloque" puede proponer una estancia de duración distinta a la pedida.
 
-**Pendiente de decisión del usuario** antes de tocar el planificador: si la duración que él escribe significa noches en destino o días entre despegues.
+**Decidido el 22-sep-2026: la duración son noches en destino.** Es la lectura natural de "quiero estar doce días allá" y coincide con `nightsCount`, así que la ventana de Kiwi sigue costando una sola petición. Para Google, que no conoce la hora de llegada antes de preguntar, se consultan por cada fecha de salida los dos regresos posibles —llegar el mismo día y llegar al siguiente— y se descartan después los itinerarios cuya estancia real no sea la pedida. Una ventana de 27 días con estancias de 12 noches pasa de 16 a 31 peticiones en el barrido diario de Google; Kiwi sigue en una.
+
+Verificado contra Kiwi el 22-sep-2026: en los veinte itinerarios devueltos para una estancia de cinco noches, las noches en destino fueron cinco en todos, mientras que los días entre despegues fueron cinco en unos y seis en otros. La alternativa descartada era contar días entre despegues, que es lo que el usuario escribe literalmente pero le mentiría sobre la duración de su viaje cada vez que el vuelo fuese nocturno.
 
 ### Dependencia no declarada
 
