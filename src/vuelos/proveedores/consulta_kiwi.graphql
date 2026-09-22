@@ -1,0 +1,22 @@
+query Ret($search: SearchReturnInput, $filter: ItinerariesFilterInput, $options: ItinerariesOptionsInput) {
+  returnItineraries(search: $search, filter: $filter, options: $options) {
+    __typename
+    ... on Itineraries {
+      itineraries {
+        __typename id
+        price { amount currency { code } }
+        provider { name hasHighProbabilityOfPriceChange }
+        bagsInfo { includedCheckedBags includedHandBags hasNoCheckedBaggage }
+        isTravelHack
+        travelHack { isTrueHiddenCity isVirtualInterlining isThrowawayTicket }
+        bookingOptions { edges { node { bookingUrl price { amount currency { code } } } } }
+        ... on ItineraryReturn {
+          outbound { duration sectorSegments { segment { carrier { code name }
+              source { localTime station { code } } destination { localTime station { code } } } } }
+          inbound { duration sectorSegments { segment { carrier { code name }
+              source { localTime station { code } } destination { localTime station { code } } } } }
+        }
+      }
+    }
+  }
+}

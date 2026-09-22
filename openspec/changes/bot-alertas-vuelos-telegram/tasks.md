@@ -13,7 +13,7 @@
 - [x] 1.5 Lanzar una consulta real al GraphQL público de Kiwi sin credenciales; verificar que responde y guardar una respuesta completa de ejemplo como fichero de referencia
 - [x] 1.6 Sobre la respuesta de 1.5, documentar qué campos vienen siempre y cuáles no: precio, moneda, escalas, aerolíneas, equipaje facturado, billetes separados y enlace de reserva; verificar contra al menos tres rutas distintas
 - [x] 1.7 Comprobar si Kiwi admite fijar mercado y moneda; anotar el resultado en `design.md`
-- [ ] 1.8 Ejecutar la misma consulta contra ambas fuentes 6 veces separadas 30 minutos; verificar cuántas devuelven precio idéntico, para contrastar el supuesto de que las tarifas se recargan pocas veces al día
+- [x] 1.8 Ejecutar la misma consulta contra ambas fuentes 6 veces separadas 30 minutos; verificar cuántas devuelven precio idéntico, para contrastar el supuesto de que las tarifas se recargan pocas veces al día
 
 ## 2. Andamiaje del proyecto
 
@@ -31,15 +31,15 @@
 
 ## 4. Capa de proveedores de precios
 
-- [ ] 4.1 Definir el contrato común de proveedor con el resultado normalizado: precio, moneda, fuente, instante, enlace, etiquetas, escalas, aerolíneas y equipaje; verificar con una implementación simulada usada en pruebas
-- [ ] 4.2 Implementar el adaptador de Google Flights componiendo la petición a mano (reutilizando el codificador de `fast-flights` y su `parser.parse`, ya que la librería no envía `gl`), con punto de venta y moneda fijos; verificar que toda consulta emitida lleva `gl` y `curr` configurados
-- [ ] 4.3 Implementar el adaptador de Kiwi sobre `returnItineraries`, con `market`, `currency` y `locale` fijos y excluyendo `enableThrowAwayTicketing` y `enableTrueHiddenCity`; verificar que `bagsInfo`, `travelHack` y `bookingUrl` se mapean al resultado normalizado
-- [ ] 4.4 Implementar el etiquetado de resultados: billetes separados, conexión autogestionada, sin equipaje facturado y sin enlace de verificación; verificar con pruebas sobre respuestas de ejemplo guardadas
-- [ ] 4.5 Implementar el rechazo de resultados obtenidos bajo un mercado distinto del configurado; verificar con una prueba que un resultado así no llega a registrarse
-- [ ] 4.6 Implementar reintentos con esperas crecientes ante límite de peticiones y errores transitorios; verificar con pruebas que simulan respuestas de exceso de peticiones
-- [ ] 4.7 Implementar la conversión a la moneda de referencia conservando importe original y cambio aplicado; verificar con pruebas que ambos valores quedan registrados
+- [x] 4.1 Definir el contrato común de proveedor con el resultado normalizado: precio, moneda, fuente, instante, enlace, etiquetas, escalas, aerolíneas y equipaje; verificar con una implementación simulada usada en pruebas
+- [x] 4.2 Implementar el adaptador de Google Flights componiendo la petición a mano (reutilizando el codificador de `fast-flights` y su `parser.parse`, ya que la librería no envía `gl`), con punto de venta y moneda fijos; verificar que toda consulta emitida lleva `gl` y `curr` configurados
+- [x] 4.3 Implementar el adaptador de Kiwi sobre `returnItineraries`, con `market`, `currency` y `locale` fijos y excluyendo `enableThrowAwayTicketing` y `enableTrueHiddenCity`; verificar que `bagsInfo`, `travelHack` y `bookingUrl` se mapean al resultado normalizado
+- [x] 4.4 Implementar el etiquetado de resultados: billetes separados, conexión autogestionada, sin equipaje facturado y sin enlace de verificación; verificar con pruebas sobre respuestas de ejemplo guardadas
+- [x] 4.5 Implementar el rechazo de resultados obtenidos bajo un mercado distinto del configurado; verificar con una prueba que un resultado así no llega a registrarse
+- [x] 4.6 Implementar reintentos con esperas crecientes ante límite de peticiones y errores transitorios; verificar con pruebas que simulan respuestas de exceso de peticiones
+- [x] 4.7 Implementar la conversión a la moneda de referencia conservando importe original y cambio aplicado; verificar con pruebas que ambos valores quedan registrados
 - [ ] 4.8 Implementar la búsqueda en ventana flexible en ambos adaptadores: nativa en Kiwi (`outboundDepartureDate` como rango más `nightsCount`) y por barrido de bloques en Google; verificar que ambos devuelven resultados etiquetados con su bloque de fechas
-- [ ] 4.9 Construir el enlace de verificación de los resultados de Google a partir de la URL de la consulta, dado que la fuente no devuelve enlace de reserva; verificar que el enlace abre la búsqueda equivalente en Google Flights
+- [x] 4.9 Construir el enlace de verificación de los resultados de Google a partir de la URL de la consulta, dado que la fuente no devuelve enlace de reserva; verificar que el enlace abre la búsqueda equivalente en Google Flights
 
 ## 5. Modelo de búsquedas y ciclo de vida
 

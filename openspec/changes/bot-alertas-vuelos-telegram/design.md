@@ -241,6 +241,49 @@ Comparación simultánea el 18-sep-2026 a las 12:00, misma URL y mismo equipo, B
 
 **Observado de paso:** la página trae un bloque de valoración del precio ("Actualmente, los precios son normales") y accesos a tabla de fechas y gráfico de precios. Es la misma señal que se aplazó a la segunda fase; está en el HTML y sería extraíble sin consultas adicionales.
 
+### Cada cuánto cambian los precios de verdad
+
+Medido entre el 21 y el 22 de septiembre de 2026, seis muestras sobre BOG-RDU 20-nov/04-dic en dólares con mercado Colombia.
+
+**La medición no salió como se diseñó.** Debían ser seis muestras separadas 30 minutos; la máquina se suspendió entre medio y quedaron repartidas en diecisiete horas. Resultó más útil que lo planeado, porque cubre casi un día completo, pero solo hay dos intervalos de 30 minutos reales.
+
+| # | Hora UTC | Intervalo | Google mín. | Itinerarios | Kiwi mín. | Itinerarios |
+|---|---|---|---|---|---|---|
+| 0 | 19:44 | — | 657 | 4 | 808 | 8 |
+| 1 | 20:14 | +30 min | 653 | 7 | 807 | 8 |
+| 2 | 20:44 | +30 min | 657 | 4 | 807 | 8 |
+| 3 | 23:00 | +2 h 16 | 657 | 4 | 807 | 8 |
+| 4 | 08:57 | +9 h 57 | **631** | 6 | 807 | 8 |
+| 5 | 12:41 | +3 h 44 | 631 | 6 | 806 | 8 |
+
+**Confirma la decisión 6.** En los dos intervalos cortos medidos la variación fue inferior al 1 % (657, 653, 657), que es ruido y no movimiento de tarifa. El único cambio real, una bajada del 4 % de 657 a 631, ocurrió durante la noche. Un sondeo cada cuatro horas lo habría capturado igual; sondear cada cinco minutos habría costado unas doscientas consultas adicionales sin aportar nada.
+
+**Kiwi es mucho más estable que Google:** 0,25 % de variación en diecisiete horas frente a 4,12 %. Y el número de itinerarios de Kiwi fue constante en ocho, mientras que el de Google osciló entre cuatro y siete, con un solo par consecutivo idéntico de cinco. Refuerza lo visto contra el navegador: buena parte de lo que parece variación en Google es su selección cambiante, no el precio.
+
+**Consecuencia para las alertas, todavía sin aplicar:** una bajada aparente puede ser simplemente que Google esta vez mostró un itinerario que antes ocultaba. Convendría exigir que una bajada persista en dos sondeos consecutivos antes de avisar. Queda anotado para el grupo 8.
+
+**Aviso sobre el umbral:** la bajada real de 657 a 631 es del 4,1 %, por debajo del umbral configurado del 5 %, así que no habría generado alerta. Con un solo caso no se cambia el valor, pero si el patrón se repite hay que bajarlo.
+
+### Dos definiciones distintas de "duración del viaje"
+
+Detectado el 21-sep-2026 al probar la ventana flexible contra Kiwi.
+
+`nightsCount` cuenta **noches en destino**, medidas desde la llegada del vuelo de ida hasta el despegue del de vuelta. El modelo del sistema, en cambio, define la duración como días entre despegues, que es lo que el usuario escribe en el mensaje de alta.
+
+Las dos coinciden salvo en vuelos nocturnos, que son frecuentes en estas rutas. Pidiendo 5 noches, Kiwi devolvió:
+
+| Despegue ida | Llegada a destino | Despegue vuelta | Entre despegues | En destino |
+|---|---|---|---|---|
+| 17-nov 15:55 | 18-nov 00:24 | 23-nov 06:20 | 6 | **5** |
+| 18-nov 09:00 | 18-nov 17:00 | 23-nov 06:20 | 5 | **5** |
+| 21-nov 23:00 | 22-nov 13:27 | 27-nov 06:25 | 6 | **5** |
+
+La fuente es coherente: la columna de noches en destino vale 5 en todos los casos. Lo que no encaja es el modelo.
+
+**Consecuencia:** para una misma búsqueda, el adaptador de Kiwi y el de Google cubren conjuntos de bloques distintos, y una ventana de N días devuelve más bloques de los que `ConsultaVentana.bloques()` enumera. Los precios registrados son correctos —cada uno lleva sus fechas reales de despegue— pero la recomendación de "mejor bloque" puede proponer una estancia de duración distinta a la pedida.
+
+**Pendiente de decisión del usuario** antes de tocar el planificador: si la duración que él escribe significa noches en destino o días entre despegues.
+
 ### Dependencia no declarada
 
 `fast-flights` 3.1.0 importa `typing_extensions` sin declararlo. Con Python 3.14 el paquete no arranca hasta instalarlo aparte. Hay que fijarlo de forma explícita.

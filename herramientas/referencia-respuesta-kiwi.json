@@ -1,0 +1,456 @@
+{
+  "_nota": "Respuesta real de returnItineraries, guardada como referencia del contrato (tarea 1.5). BOG-RDU 2026-11-20/2026-12-04, mercado CO, moneda USD. Sirve de base para las pruebas del adaptador sin llamar a la red.",
+  "_capturada": "2026-09-21",
+  "respuesta": {
+    "data": {
+      "returnItineraries": {
+        "__typename": "Itineraries",
+        "itineraries": [
+          {
+            "__typename": "ItineraryReturn",
+            "id": "ItineraryReturn:eyJwcm92aWRlcnMiOiJLSVdJLUJBU0lDOktJV0kiLCJyb3V0ZV9kYXRhIjoiTEE6NjM2NDpCT0c6MTc5NTIwODEwMDpBVEw6MTc5NTIyNjU4MDplY29ub215OkZhbHNlOjo6REx8TEE6NjU2NzpBVEw6MTc5NTIzMzQ4MDpSRFU6MTc5NTIzODY0MDplY29ub215OkZhbHNlOjo6REx8Rjk6MjMzNTpSRFU6MTc5NjM4MjAwMDpNSUE6MTc5NjM5MDA0MDplY29ub215OkZhbHNlOjo6Rjl8QVY6MTI3Ok1JQToxNzk2NDA4NDAwOkJPRzoxNzk2NDIyMjAwOmVjb25vbXk6VHJ1ZTo6VHJ1ZTpBViIsInByaWNlIjoiODA4In0=",
+            "price": {
+              "amount": "808",
+              "currency": {
+                "code": "USD"
+              }
+            },
+            "provider": {
+              "name": "Kiwi.com",
+              "hasHighProbabilityOfPriceChange": false
+            },
+            "bagsInfo": {
+              "includedCheckedBags": 0,
+              "includedHandBags": 1,
+              "hasNoCheckedBaggage": false
+            },
+            "isTravelHack": true,
+            "travelHack": {
+              "isTrueHiddenCity": false,
+              "isVirtualInterlining": true,
+              "isThrowawayTicket": false
+            },
+            "bookingOptions": {
+              "edges": [
+                {
+                  "node": {
+                    "bookingUrl": "/es/booking/?direct=true&locale=es&currency=usd&passengers=1-0-0&token=HFlLh34cbaIp1OdGjAYNUVvnhWrCtf9kIZrKE0zyK5Gc8q6r9u9ikyuzIFJz9SiYhps9huzsFmHRn-silfqXPcmHupno-LRjUF3kyhQy-oYo7K58aO9lviEAJzmaZ24d5tmCrivnxiLRvhgUQvNUA3-nzQZpD4jCEVd4kK31mYzcMC7BBwgcLARsnY-WPob_4GZkoElavlwQVe29uDshBd0CiVkZrp3RciaWFTqyHzxwjqwLHCC-Zl9I0-31nnL23Xrk1DZWclec6RGsBesmJuggcpnQbaA2b6bv_RfHvqwLkmT16JjgD9TRd08GahXKQvZTS7ezgUCYarB4D4mM0OHd8Ay-7ULE0pHPDefG-16zHjMpJlE9m4FOYrbBz7Yjzqljbqw3Ovo22pCu33-Dtf948sdh-l_hrTslvEaUrGJ1och0hburnMpYTMTyFjwI1kikdM4aQ3UYTpQoIzGAltK_D3HnKDB5IzQA5XoHyhb2sZazufLj7wzgvyADu7yxmiZTu7pGUjDtXSxHxUjUBaY6xtvZluXKrUEL2QjszqGuhPAEonRt5bBCFic--7eUFY-m4w9PdjMP1mS_wVs0XXe9JeTNgb9yyRYKszABuIB7xRl-0I0tNqi95Wwq1yKQRvbU4NG-T10t97LrZRGQxl82ByGu9OZMp4wuNWjhkA6wo8CYp86skINoqcHAznZIo0vANflCtrsoNucw589sSWOst9msur1FkUXfBByZgbud6tjwcVIYIE8DPuHUEVCSoZakfQyLuznO5HhqOsJx7bJCnJDtWcjROqSNY1bZQGfnfh1V-KwSdVvsWYoZleQgVpSCMVATwnK8h-hdiVjFcirAzIneYzWgBIKEIJVQ6ZfGwBYq70Zyfio2EIoNVfeW1PXm9hdfnCeUAQqMbt33hQR5fOCYNw2zKR9dbE7IcAsdm5AlgT8DhogrF7ZKul3tRSTvkde1Nd0moxCQd8mb8jDkaSB5A4oVkqKhQ0YxYZqqMCZCLoLGaCX01LzDiXBLrfXXJCw28eJ6dEFrUn2pZtbMud4-9dff6j-hN6AZol01fMiMRDvSvyVBQQkK-9iPHXIGmzaXyV5RiqfRbth0ex1IZDbtcjysHQ9x8Ek1uMtIaAvY2p6e4-n_t2BBjZ-AICmgqG14lbTuPzk_XLcxKPkJxwMK3WzXhZcVIrv6GSEyCNNxUps41ScEjz4G-XeMnxkEqyDUpggzDC2CSxRPCNcpAv9_pkSv1lED4HStlnzd_NU67YsxNIe1eAoFp1iLNqxsxEMiCSsqHxsZkHh2Rtoh04drXeAxI-Uwl1BsxUYFy347QKdRdLgqGEiLKNAaPDIxgUr8kanvLEeA6549GVjYtl-kLBWG-K8ZLq8Z63t2VU8NkUxyFM5Udd6TxfSm65euMlPubf2FR4MOdAvKLDw%3D%3D&searchType=return&searchBags=1.0",
+                    "price": {
+                      "amount": "808",
+                      "currency": {
+                        "code": "USD"
+                      }
+                    }
+                  }
+                },
+                {
+                  "node": {
+                    "bookingUrl": "/es/booking/?direct=true&locale=es&currency=usd&passengers=1-0-0&token=HSs8mfEqAatYh5F-HJ4BJfjOp6JmtTrFuC1zDWQ0jpOmgRRCxsN2J2T3vKOAjVeC7cc-MWBfuQx6hvY3ebPtLbXXttqXKK5m_LLAH1za6ye0tgsnaF3Vo7jqR5wWMlXD3Ta9NDnPMscwDXhgqjvHZlCOWPe6rKMe7_tfLDGdOZcBZjcYBPzk0SLLIRpQsfDI0jTkgh2mZujFIjE9cI66IA1SMY0CfLT_MYTb5O4iI2J0YOIGwFivTe-3cc-GRP0ZNBCM5zhPBeIibvDCcgnV1QaxH_cBxIZhgz97G0jm3rDnmVts92-lXu2HYgrJa4JE8oQaAlHLNK-ciwSytNSnkIZkYOORuXR5B05zeeclUlIWEzfCZb52NLNBeqCgzHSwzuSVl7MXfZWoGJGeaXy3ObR5z3fqjiU_EyNiDupKZl9KHq_FJC1i7MZNogocuzo_RH3vmaqI0AOC2JC-jG9GJYRi3Ap47nmWw23IsP4LGqKsgJZVC5Z4aJ4kGlVAdluwdO6uOKlaepqqIhVLmt0jZjFdA2B_EfNHF3tFdMoxf3eNmuygy2-bfmMnpSQOwpg8-uEXN7GtHfuCK-z5M1KtefMUpRw5nDS7KabybCAvfw2mQ3XgNT25v1BDbsiNmLUem8X7siIX-7987n3dIvAiPOW-jDrnSKmC035h3tu1QZpNnlfVEP6NQ5pBSJrGrvnKAzhRYlpNLjrtR8JWgOitIUthD_yM4obBCWX1bONxneTwAqfREvc-l1OcQViTsZdae971vifC_q6YrIQwZtmKQ_BwZTWZA-j11UZZaO5P6xwxBIvdfL3z4cO0z1clEzEpaJCFsOmIn0zPLatZgjfvGemO7H40-_cHNv4E2Not6lW_vMNvP5xf-y_v3tCd6y2zENRYHefs6ScGfoVQ2jwuVSBPeHrLGSSgtRio9XoZUx75RXoiAglHaNGgQshiZ7kt_EXn2zS_Nv3usE8zSt95vriG_OkKFk7_mhN2BhDqhZ9-RuDickMHE8QQOreg2VlP3OjAHKpyqitejgSkCJd4BnTKWCQtDyY3nckXQZfhXcIZXyG7nwHveHrQo4fVzb_vziFFImGLM6mIjyF3wNopA2oXh3gUAD0rEam7kMG0KiayKqlOWCO1TJPhgO9iFz7bJSld6R8vBzBsEuWcNvOiTjGWpVP9R_bS6Q4-m-gbchREwDugUsg0X_OBtbVyx_AjvGWwoY6Uf9g1AiMz7E2QFqDURoPKnb3AK2vQLY52q_tzwv_BoXhEDPcjaUy3cjuJUb_jKeQQMPn3dznT_VMYiWx9fk0knktEUGuQNLp9jTgDamc1axNBkaFmxdoDsY8oi-u4w7N2o6IL2g-0Bg-1s-Xbez88XrxMkCiP02LpTlStqnc_Avrf-LiwxHyA1Ju_nuQo36K55dafmzTqIAJGiCA%3D%3D&searchType=return&searchBags=1.0",
+                    "price": {
+                      "amount": "882.270063",
+                      "currency": {
+                        "code": "USD"
+                      }
+                    }
+                  }
+                }
+              ]
+            },
+            "outbound": {
+              "duration": 30540,
+              "sectorSegments": [
+                {
+                  "segment": {
+                    "carrier": {
+                      "code": "LA",
+                      "name": "LATAM Airlines"
+                    },
+                    "source": {
+                      "localTime": "2026-11-20T15:55:00",
+                      "station": {
+                        "code": "BOG"
+                      }
+                    },
+                    "destination": {
+                      "localTime": "2026-11-20T21:03:00",
+                      "station": {
+                        "code": "ATL"
+                      }
+                    }
+                  }
+                },
+                {
+                  "segment": {
+                    "carrier": {
+                      "code": "LA",
+                      "name": "LATAM Airlines"
+                    },
+                    "source": {
+                      "localTime": "2026-11-20T22:58:00",
+                      "station": {
+                        "code": "ATL"
+                      }
+                    },
+                    "destination": {
+                      "localTime": "2026-11-21T00:24:00",
+                      "station": {
+                        "code": "RDU"
+                      }
+                    }
+                  }
+                }
+              ]
+            },
+            "inbound": {
+              "duration": 40200,
+              "sectorSegments": [
+                {
+                  "segment": {
+                    "carrier": {
+                      "code": "F9",
+                      "name": "Frontier Airlines"
+                    },
+                    "source": {
+                      "localTime": "2026-12-04T06:00:00",
+                      "station": {
+                        "code": "RDU"
+                      }
+                    },
+                    "destination": {
+                      "localTime": "2026-12-04T08:14:00",
+                      "station": {
+                        "code": "MIA"
+                      }
+                    }
+                  }
+                },
+                {
+                  "segment": {
+                    "carrier": {
+                      "code": "AV",
+                      "name": "Avianca"
+                    },
+                    "source": {
+                      "localTime": "2026-12-04T13:20:00",
+                      "station": {
+                        "code": "MIA"
+                      }
+                    },
+                    "destination": {
+                      "localTime": "2026-12-04T17:10:00",
+                      "station": {
+                        "code": "BOG"
+                      }
+                    }
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "__typename": "ItineraryReturn",
+            "id": "ItineraryReturn:eyJwcm92aWRlcnMiOiJLSVdJLUJBU0lDOktJV0kiLCJyb3V0ZV9kYXRhIjoiTEE6NjM1MjpCT0c6MTc5NTE4MzIwMDpBVEw6MTc5NTIwMTMyMDplY29ub215OkZhbHNlOjo6REx8TEE6NzA2ODpBVEw6MTc5NTIyOTQwMDpSRFU6MTc5NTIzNDQ0MDplY29ub215OkZhbHNlOjo6REx8Rjk6MjMzNTpSRFU6MTc5NjM4MjAwMDpNSUE6MTc5NjM5MDA0MDplY29ub215OkZhbHNlOjo6Rjl8QVY6MTI3Ok1JQToxNzk2NDA4NDAwOkJPRzoxNzk2NDIyMjAwOmVjb25vbXk6VHJ1ZTo6VHJ1ZTpBViIsInByaWNlIjoiODA4In0=",
+            "price": {
+              "amount": "808",
+              "currency": {
+                "code": "USD"
+              }
+            },
+            "provider": {
+              "name": "Kiwi.com",
+              "hasHighProbabilityOfPriceChange": false
+            },
+            "bagsInfo": {
+              "includedCheckedBags": 0,
+              "includedHandBags": 1,
+              "hasNoCheckedBaggage": false
+            },
+            "isTravelHack": true,
+            "travelHack": {
+              "isTrueHiddenCity": false,
+              "isVirtualInterlining": true,
+              "isThrowawayTicket": false
+            },
+            "bookingOptions": {
+              "edges": [
+                {
+                  "node": {
+                    "bookingUrl": "/es/booking/?direct=true&locale=es&currency=usd&passengers=1-0-0&token=HVcDbHdChmfNkjpbhH8eV7pVeq0uvckc5h63qLI3VfaMM8wcj1-rDLZRy1_6myJMZIlnjMbP2PmHYCVRrKTa8uO_HOPzCwho2Z6y27BCGug5-Pm3ynZXNq-xzHWsuZxXBXHxBY-09tYowgQPXuaqHYaULLr3s5HdXmK3Hj61A3odzMhqrzn7MVJCaCq03tNZqBoo0f_Cv9JE6Rx2iRZweZz3zJmPwPxW55RehGNW-Vya2QfoHFiYEtwboGK-KrCP7_6JVlUKlcgbx77A8Yvxv_aI_lfkGZHluGZ4vYpLqYp3lQ6oo81sbRXpqE-xUStVUYvQfP8tzPVfb5nDzAm65UIdBAVmhQO7HiIel19i_hIY2lTufHq3yMtIl4lBk4dQ_R0h6NPTnk6S7zxjra9gOJGsGDSVY91I64KD3_Xkd1idOxvdXh1teMso15Nw4InAghR5QS5qn5JKxn9ZHl7jtvUxRIAHrVopd20lP-PKtnhCdhZoVaECksTaZEl9iSmXOUAhrjixdVX90lZDsEQgDIFSlP0Txex2xDPT-atoEFZ5qf7pXobO1Mkv-h3tTEWrG1C8N6V2iXqSsmqkkYtqPDjgdbs9rWBdEC56NVcIRW_EGc1fFX1yG8kG-0L4aZtZ6lo4yUbht4IiNlXD78eAoBuBlU0ArJFxf11zyHxVHNlDmHLmok_Eslbqfbh5dU3glSuP98oXpCWUfbrHibPi8yeK_S0Y2_gQf51oIFntiwl8nTpBTORQaxuZS0U_aECoCjKzAFquHl6LOC6aZKCytN_YweEAdHJkxjwaNl10fr1peT3gkWaCjojkGUkJ4YBKZPQdcob9A7DfmhREdls9-ZhOo2bGqSdpl1jV_towU4CejQLPJo5cujOQ4-6mTEwyzMprE6IzYRq3CDgnWJ7FshnR6l7OoBdtHvz55H6P646YRiqUOzDqc37E1uHCQqZ4tzYCSpVXADiHp3y22PGlEu7nY62aidiYMpbbwJWAP67uzvQzJPEe2T8zfpMr1sl_-nRSo-C4JZ4N2mfBkJyJdERQQGPl0sJ21bS2zifltlHy4kKjvxaLQQ3JFWZ_2YHizm30aZmKW9OgVAj9Ytk2mveLD62N-kLC9oiOz9s30zD00hlMB8rKNZR6pxxDrYZsPJkYS77Qtt5OnDxfCaSMYFj27ZzNIYcZAS7rqeSVPI8ZevOZhROCFMS5R5zUmP5D6QsY1_sBDQ2EybV3TKnHrO-jxGtkpuZXAnnhvNVVA_PMujo7Y3Q7pUz4ulU_GHCo8QwJBmLxC38qJUA88ANyWjVa0qmYVgroMilltvyck-8Hs8jdKo2kAIKoGeoUMzoeRbKRlrR8ao-ZIvsf7wPsroy9KUgk5EN1agJ1zyXE2K8Sq0bgkZPMz8t-j4wSv3rvGfMwuwZKqNw2Eo0EGn6Y5Lg%3D%3D&searchType=return&searchBags=1.0",
+                    "price": {
+                      "amount": "808",
+                      "currency": {
+                        "code": "USD"
+                      }
+                    }
+                  }
+                },
+                {
+                  "node": {
+                    "bookingUrl": "/es/booking/?direct=true&locale=es&currency=usd&passengers=1-0-0&token=H_5cmHnFD8H5sstg7Vj88wFyhrOgnHZ3I61Hz0bfep7QyXC35_GB5GOF61tRGb6EWNusVhE4iEnjhP1YBhDRNENHWjbgry5iumTRh_8SkcbF7dxU2EOC4EZedbjEbgjUOhiLPG76wzmXg1d1VtGLHxR6l62WhAL3RGRvBxJ_2FIsx6pHskjD99M6JDWbL3EIjRJjutCzuma9lo5ARqPSPxma-BA8O2QpRVuHgZQyREX8mQePuqCjtN93D-mAZ1sVYd-BC0mlYQG0_u7L3l6-dGSVE6-9uGqNI-ztzX4VEsqg0VVYB2XHpusRZI2c_7QbQTBZAIig26Y0xpznkPuJfl9Lf4JYxib1PF2BHCGpC8j4xGR2gs6rmij1_rIdTVAq6QFQE-PfP9OzuETMJ7dj_Wp3GdwQ0R6kUHKgH9vTV9ZJ3665Zlc6IEijbbHgpOonuUmI-qZNqyCS_Cb89dqeGnlJ7OESacQGpq478uZEeCGWWOsgTCKYThafRXqfhaV5a2z7Hobtg_7xMVaRxbMzFs0gNCupaA6oC8PpxXTIos6VxanxztOnTy4fUucKsoIh9te3bXz7qGddAVqWG_Q-Q4zTPHXfFAYHa-WMkN7mY8mKsNsRmoyPMVdAHQKqSoPirlL-S4M_tVgT-_ppelPC8UwP45TmdXTgLRfn63j1oLkLTDDX7B7utAqYYB-9pGQE3imth1V-HnjkEj5PowDSyfnaHgS06333kuGNAGIuqQjeK4WERgu_cD8iJsTV-sruUuRpQJj2GQSRWdumfDrgzYIoheMthyg5pVpbLk6luh5005r1fK4XwMbCnPki33qSHw_7YTqmR4Bm8jAv4vpFGcthmPuYv9zLTepJKFpqIfhGfxjA5YF1DenzsTsDdCo9J92NmPgji1DxFrNfgf1pBSRw-OODaqx4YXKNQ_i4aFIxtE5g4QnGUkBGV9Vc2tmVtQYsVW6DG6QSjm6fkhXX3Qo2OUYQk4zSOyT9mbjFwLpGTd8zA1RTbd8GszgQasWCNCgduDd60CAWC0K-25O5LJPMMYx5j0p95aT3FiYf9LgpDZ90PTbTtNCmnOATO4dfhzu1j1hBT0Qnygpox4WGQaK5ul6BDuUt1bPtOZEtDiCHr2fRE5bDhLHq7e7yUjOaMpT6MwF43Px11ZDp-BzfmIyJv86fCqrBFfMe8NmECuNoshSHwHnrf9E91zgrovCNzSdLaiUcA-MZnH1_BL-1uyD1g5CXTjeSFXQh7beM-WG5APAPJnGUTNheAlBNeZrfl8ufLyj6cuj1KFlToso-AaD6XeMk4OF14cyv4dLpO_6g2fvdkrMtQD2b41esIoUiUa7YbVYjDo2tWkqsSWrbq5zVfv-xzYACxkMFmEF-QL5c5VsVcMVhspBdxgPPk5osZ&searchType=return&searchBags=1.0",
+                    "price": {
+                      "amount": "882.270063",
+                      "currency": {
+                        "code": "USD"
+                      }
+                    }
+                  }
+                }
+              ]
+            },
+            "outbound": {
+              "duration": 51240,
+              "sectorSegments": [
+                {
+                  "segment": {
+                    "carrier": {
+                      "code": "LA",
+                      "name": "LATAM Airlines"
+                    },
+                    "source": {
+                      "localTime": "2026-11-20T09:00:00",
+                      "station": {
+                        "code": "BOG"
+                      }
+                    },
+                    "destination": {
+                      "localTime": "2026-11-20T14:02:00",
+                      "station": {
+                        "code": "ATL"
+                      }
+                    }
+                  }
+                },
+                {
+                  "segment": {
+                    "carrier": {
+                      "code": "LA",
+                      "name": "LATAM Airlines"
+                    },
+                    "source": {
+                      "localTime": "2026-11-20T21:50:00",
+                      "station": {
+                        "code": "ATL"
+                      }
+                    },
+                    "destination": {
+                      "localTime": "2026-11-20T23:14:00",
+                      "station": {
+                        "code": "RDU"
+                      }
+                    }
+                  }
+                }
+              ]
+            },
+            "inbound": {
+              "duration": 40200,
+              "sectorSegments": [
+                {
+                  "segment": {
+                    "carrier": {
+                      "code": "F9",
+                      "name": "Frontier Airlines"
+                    },
+                    "source": {
+                      "localTime": "2026-12-04T06:00:00",
+                      "station": {
+                        "code": "RDU"
+                      }
+                    },
+                    "destination": {
+                      "localTime": "2026-12-04T08:14:00",
+                      "station": {
+                        "code": "MIA"
+                      }
+                    }
+                  }
+                },
+                {
+                  "segment": {
+                    "carrier": {
+                      "code": "AV",
+                      "name": "Avianca"
+                    },
+                    "source": {
+                      "localTime": "2026-12-04T13:20:00",
+                      "station": {
+                        "code": "MIA"
+                      }
+                    },
+                    "destination": {
+                      "localTime": "2026-12-04T17:10:00",
+                      "station": {
+                        "code": "BOG"
+                      }
+                    }
+                  }
+                }
+              ]
+            }
+          },
+          {
+            "__typename": "ItineraryReturn",
+            "id": "ItineraryReturn:eyJwcm92aWRlcnMiOiJLSVdJLUJBU0lDOktJV0kiLCJyb3V0ZV9kYXRhIjoiTEE6NjM2NDpCT0c6MTc5NTIwODEwMDpBVEw6MTc5NTIyNjU4MDplY29ub215OkZhbHNlOjo6REx8TEE6NjU2NzpBVEw6MTc5NTIzMzQ4MDpSRFU6MTc5NTIzODY0MDplY29ub215OkZhbHNlOjo6REx8Rjk6MTE2NzpSRFU6MTc5NjQwNTA0MDpBVEw6MTc5NjQxMTA0MDplY29ub215OkZhbHNlOjo6Rjl8Rjk6MjI3MjpBVEw6MTc5NjQyNTAyMDpNSUE6MTc5NjQzMjQwMDplY29ub215OkZhbHNlOjo6Rjl8QVY6OTpNSUE6MTc5NjQ1MjUwMDpCT0c6MTc5NjQ2NTcwMDplY29ub215OlRydWU6OlRydWU6QVYiLCJwcmljZSI6IjgyMiJ9",
+            "price": {
+              "amount": "822",
+              "currency": {
+                "code": "USD"
+              }
+            },
+            "provider": {
+              "name": "Kiwi.com",
+              "hasHighProbabilityOfPriceChange": false
+            },
+            "bagsInfo": {
+              "includedCheckedBags": 0,
+              "includedHandBags": 1,
+              "hasNoCheckedBaggage": false
+            },
+            "isTravelHack": true,
+            "travelHack": {
+              "isTrueHiddenCity": false,
+              "isVirtualInterlining": true,
+              "isThrowawayTicket": false
+            },
+            "bookingOptions": {
+              "edges": [
+                {
+                  "node": {
+                    "bookingUrl": "/es/booking/?direct=true&locale=es&currency=usd&passengers=1-0-0&token=HyUAeC7S0tGZQ92_f8YkbsVukPsKRlk5LYNsc6sIvHdc12MQj0ZqvPAjfCuzStGvBuaSQJGSb29W7oSWE3nsbNRoyZb2hxxoCgScUZ1pZFtHpqm62489WhVv9wciXDHtnQkhI7N912MuyBfbiKDpLtE6szd9rB0bKmr-yI2yQQswIS0shiWFk4a1d1OscB8dcbWF6LFw43IJGDGC41kAADPTbVRMg5EjbC-NzWb_ruxLJvVKph3hoe6Mbjg_kislYsuC1LhUE0a_MKBtwJEyFVYQytU-20vIuovagVSi23vN7pmnQBOwUVueSIU77EmzaKmx3TSvCK4Grp0rkyHHTfRD2pCrvElEjNIFSxCCrqt-0AuLhdvt4vHrNzrU05djaxMhiXRb2NlNKYZoIZ0yaiwLROp8Sb72OSBZLWJSDY7jKcrU7pnsKTBiwbew9NHCksJF8gcUYUVGZq2ImLz-2wnItRIfjazfagLNvx-9GmOaYAUuxi7L9rrtiAR9otKR5Jz60lH-RXReeXY7iZPL8m8qmVxXpt4rUZZvoyAIqUgT-_7yHA5tRNKbX28XX5aR-pBg1fzPyO85ozX7Qtctk6TlAAqV1db5u7pxWDHGqySNTv04n4tWj2Ko9K1Vlf6XJ5zwCxM24dywrcrwhPMDKnnBPCZdvBA5GAsaffJZDigtgsuvfj-3l3uUVMAv1VtzHGV4PIC1FWW-aaixG5iS-pBmOJW47ry2KmVyMwWvY17Bd3WxT6EFSJoKvaaVHvTenIGZpjWfOKYV_YLKkMp3Lr9-S6OOhqRrG_D6noaM6BI8SsqdmF9Lcknz66ejjy0WS25xACI4qkjJW2JnBjnzmtUfZS-V1KNR_Ip6U1Uxbfd6ounsVQRuoxILhk3SMqkPENLj_P0c21jnkWNmQ1VxXP4vv9SvoFBWerplubm8U7iEYABv4oYpEZaJRdWFwze8Ny3Gsp_-dHEt3OJ51JauvihbxYpvZEjHr1BITLhu1soVQCpgca6h80n4yrsl5vISu_h9se28pQnS8Lyg5yVY410_KDa74P-eX1d_1yl3cWLA5LCGZsuDUGxBYxo0w4EvKLiFJM5cSJNv7T3aqtt_wIon0rrR3adyunFtE6bgndEGP-u5aNkdDa-3c7XtEfoTCy98cAsIWkE3yR0qHABVyI-7b-0DmFhGHR5vjGXrzvB514QGjd06Ufp5ipTIYbl_ELAgdqADmS5N_7D-Qz6snswsOIwP1Jr4cjxWQk7r1O6l3kdYz9_ChM6TNGz4yQg7AYHZ3JiXQt1Xkd-sxoKyHUvWqLumQMxVQiNNUY1E_MD5KXheZ54Zcq1-HwBc6QPXftHznRL_4e7tspykVaSISOwApbikhU1hS1DyvrfMd72Ri9htiPv2e_sAF_2xcjiMLZyRyjPpH4p_wFAorH77Y2BHW13OKi5y9Eln-DT8Mu9g%3D&searchType=return&searchBags=1.0",
+                    "price": {
+                      "amount": "822",
+                      "currency": {
+                        "code": "USD"
+                      }
+                    }
+                  }
+                },
+                {
+                  "node": {
+                    "bookingUrl": "/es/booking/?direct=true&locale=es&currency=usd&passengers=1-0-0&token=H6hzydNEyBZi4_yXBTNLgHM5B9pFKP9O8GTvy8yekgEIcaRCpKHxyF8NzhAwZULfCKpCRvVkRw9LcKIC8Z0o6qUY3dVkynqhHwBlKZjv_9P1SxubwmVlirw456qM2u82DKIrBwD3XUyoevRNRzfesIB76TYGJVlFUw8J1bQ8zp4-QyRid6opfIvBZpT-ZKJtT0yBjWixo3gYT007rPTCeNa-WCHlVzm9cCJ8w4DIy2FgRMm4tQ8-3A-Q3vxHjvXdEfyBnyEsHRp7_XuqEZlN-3_gQZaL76xS80T5QX_VTrrZ2Ak9TzRGpouvRX1omoKa-93V1AcPjDoIph-wgA8GZHVs3699ItJHkYS1XLIR8e9Rir5bKWJemtBCrfii1-pViHEUZMDD3m_MFbMZEgpemaOozWgMQ6z-gv33d6_ZMEl-0TQbf8b5rPiAd8nEnpun6piWux50_LDmENfLCLxZpLROmVwH5D-Bx6vQRCyTjCWmyIfX7iH5i_6flC52U4KFUW2cuPcEEhsm3PVPKpDlX3PAcwWE2eCagqgEsOlnwhCfYLJVMQf1ypBC65Jj5USLNrCrG4ziIDFi7PVW7mQdouHvOyg42yJMH-lW45C8lad9KFFWkZ7p0iHH5_OSmSycN8KNk0GP440zYPInIuX5AJhBHTYPZm6wfP1LYbjCdtPL1JB4DxP0Xoiq3rWadtnFOV5ciWQUGqyxCD6GmMDcGD1NEMBvg13Xl4wtWeQgxMKDKgE19UjRkz-eKP5bfJMqWcmVIqePevGewsYopPs3w0KRTTE8WWAKQ4J_qfXt8OJ-VEixrZu0SEn8P78HNXHWrNMCiJXKNXFK6Np8_8k_lQE2a4let8gBVdRpRCd-Z-bv8HBoqyimV3nsaaYPWLxcUcav4gmKcjmeDr9RLH6zJynyGRPhZwbD9XafwzNyDPI0IaG3_zuzQpYVytni8oEspUCw1nVJg2E9niZ_I3kIOU_CJa7FiS3zo2XfA-KiYXmbfcrZjwIjwNw25XA4PV_coKDLAgQogcAH8_3C6n6ZofHChKneJ56fAQoKPaXKTKEFjv_FsZioJn8AwO_svqliQqRkUfr5sUuyRW-s1kpJUsqyFNqVO0WiWO1Tf2K7b7kdsZL-BqbyU3bOQM4IOYjt0BjXAyxafAsjn0Xj9VvyHFb_uaXyhNbnqZqpRF01UDg25xBFopmif7LBKF2ShyPUQQBzGYheHcpqzqmJVMLD_iKuWblz8r3aFoc5Cl1VHH7590v0hnKTc460Vi5ukjkmjDz75xHHTYcx34JCblvsPilF-HePQhahTKkIwsuB8znBS_tL4gibBwmWuStL9C4PDIkRWMUlbqtzaML9HLyV5FCV_Ngwjollgsw6l9SnE9VA3apqbZh3pwgum_Z4789KOHpWLPpM4C2bt_sTl3bkaC7QvrruRXD0wkSC_vyeiEco%3D&searchType=return&searchBags=1.0",
+                    "price": {
+                      "amount": "900.239631",
+                      "currency": {
+                        "code": "USD"
+                      }
+                    }
+                  }
+                }
+              ]
+            },
+            "outbound": {
+              "duration": 30540,
+              "sectorSegments": [
+                {
+                  "segment": {
+                    "carrier": {
+                      "code": "LA",
+                      "name": "LATAM Airlines"
+                    },
+                    "source": {
+                      "localTime": "2026-11-20T15:55:00",
+                      "station": {
+                        "code": "BOG"
+                      }
+                    },
+                    "destination": {
+                      "localTime": "2026-11-20T21:03:00",
+                      "station": {
+                        "code": "ATL"
+                      }
+                    }
+                  }
+                },
+                {
+                  "segment": {
+                    "carrier": {
+                      "code": "LA",
+                      "name": "LATAM Airlines"
+                    },
+                    "source": {
+                      "localTime": "2026-11-20T22:58:00",
+                      "station": {
+                        "code": "ATL"
+                      }
+                    },
+                    "destination": {
+                      "localTime": "2026-11-21T00:24:00",
+                      "station": {
+                        "code": "RDU"
+                      }
+                    }
+                  }
+                }
+              ]
+            },
+            "inbound": {
+              "duration": 60660,
+              "sectorSegments": [
+                {
+                  "segment": {
+                    "carrier": {
+                      "code": "F9",
+                      "name": "Frontier Airlines"
+                    },
+                    "source": {
+                      "localTime": "2026-12-04T12:24:00",
+                      "station": {
+                        "code": "RDU"
+                      }
+                    },
+                    "destination": {
+                      "localTime": "2026-12-04T14:04:00",
+                      "station": {
+                        "code": "ATL"
+                      }
+                    }
+                  }
+                },
+                {
+                  "segment": {
+                    "carrier": {
+                      "code": "F9",
+                      "name": "Frontier Airlines"
+                    },
+                    "source": {
+                      "localTime": "2026-12-04T17:57:00",
+                      "station": {
+                        "code": "ATL"
+                      }
+                    },
+                    "destination": {
+                      "localTime": "2026-12-04T20:00:00",
+                      "station": {
+                        "code": "MIA"
+                      }
+                    }
+                  }
+                },
+                {
+                  "segment": {
+                    "carrier": {
+                      "code": "AV",
+                      "name": "Avianca"
+                    },
+                    "source": {
+                      "localTime": "2026-12-05T01:35:00",
+                      "station": {
+                        "code": "MIA"
+                      }
+                    },
+                    "destination": {
+                      "localTime": "2026-12-05T05:15:00",
+                      "station": {
+                        "code": "BOG"
+                      }
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        ]
+      }
+    }
+  }
+}
